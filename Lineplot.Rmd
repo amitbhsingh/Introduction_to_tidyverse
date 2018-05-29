@@ -31,7 +31,7 @@ ggplot(by_year_continent,aes(x=year,y=medianGdpPercap,color=continent)) +geom_li
 
 ## Including Plots
 
-Braplot
+Barplot
 
 ```{r pressure, echo=FALSE}
 library(gapminder)
