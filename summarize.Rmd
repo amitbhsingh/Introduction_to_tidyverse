@@ -1,0 +1,100 @@
+---
+title: "Summarize_verb"
+author: "Amit"
+date: "5/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+#step 1
+library(ggplot2)
+library(tidyverse)
+library(gapminder)
+```
+
+## summarizing into multiple columns and finding mean life expectancy from the gapminder dataset
+
+```{r pressure, echo=FALSE}
+gapminder %>%
+   filter(year==2007) %>%
+   summarize(meanLifeExp=mean(lifeExp),totalPop=sum(pop))
+```
+## summarizing into multiple columns
+finding median life expectancy from the gapminder dataset
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+gapminder %>%
+   filter(year==2007) %>%
+   summarize(medianLifeExp=median(lifeExp) ,totalPop=sum(pop))
+
+# Filter for 1957 then summarize the median life expectancy and the maximum GDP per capita
+gapminder %>%
+filter(year==1957)%>%
+summarize(medianLifeExp=median(lifeExp),maxGdpPercap=max(gdpPercap))
+```
+## summarizing into multiple columns
+
+performing summary withing each year
+
+```{r pressure, echo=FALSE}
+# Find median life expectancy and maximum GDP per capita in each year
+gapminder %>%
+  group_by(year) %>%
+  summarize(medianLifeExp = median(lifeExp),
+            maxGdpPercap = max(gdpPercap),maxpop=max(pop))
+
+```
+
+```{r pressure, echo=FALSE}
+library(gapminder)
+library(dplyr)
+library(ggplot2)
+
+# Find median life expectancy and maximum GDP per capita in each year/continent combination
+gapminder %>%
+  group_by(continent,year) %>%
+  summarize(medianLifeExp = median(lifeExp),
+            maxGdpPercap = max(gdpPercap))
+```
+```{r pressure, echo=FALSE}
+
+
+# Summarize medianGdpPercap within each continent within each year: by_year_continent
+by_year_continent<-gapminder %>%
+group_by(continent,year)%>%
+summarize(medianGdpPercap=median(gdpPercap))
+
+
+# Plot the change in medianGdpPercap in each continent over time
+ggplot(by_year_continent,aes(x=year,y=medianGdpPercap,color=continent)) + geom_point() + expand_limits(y=0)
+
+```
+```{r pressure, echo=FALSE}
+library(gapminder)
+library(dplyr)
+library(ggplot2)
+
+# Summarize the median GDP and median life expectancy per continent in 2007
+by_continent_2007 <- gapminder %>%
+  filter(year == 2007) %>%
+  group_by(continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap),
+            medianLifeExp = median(lifeExp))
+
+# Use a scatter plot to compare the median GDP and median life expectancy
+ggplot(by_continent_2007, aes(x = medianGdpPercap, y = medianLifeExp, color = continent)) +
+  geom_point()
+```
+
